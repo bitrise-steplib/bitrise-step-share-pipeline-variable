@@ -25,7 +25,11 @@ func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) (*
 	if err != nil {
 		return nil, err
 	}
-	u = u.JoinPath(fmt.Sprintf("pipeline/workflow_builds/%s/env_vars", buildSLUG))
+	u, err = u.Parse(fmt.Sprintf("pipeline/workflow_builds/%s/env_vars", buildSLUG))
+	if err != nil {
+		return nil, err
+	}
+
 	return &BitriseClient{
 		logger:     logger,
 		httpClient: httpClient.StandardClient(),

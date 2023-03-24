@@ -1,6 +1,6 @@
 module github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
 
-go 1.20
+go 1.19
 
 require (
 	github.com/bitrise-io/go-steputils/v2 v2.0.0-alpha.17
