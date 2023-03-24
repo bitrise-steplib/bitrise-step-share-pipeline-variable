@@ -40,6 +40,7 @@ func run() ExitCode {
 func createEnvVarSharer(logger log.Logger) step.EnvVarSharer {
 	osEnvs := env.NewRepository()
 	inputParser := stepconf.NewInputParser(osEnvs)
+	envRepository := env.NewRepository()
 
-	return step.NewEnvVarSharer(logger, inputParser)
+	return step.NewEnvVarSharer(logger, inputParser, envRepository)
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
+	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
 	"github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/api"
 )
@@ -40,27 +41,29 @@ func (c Config) APIEnvVars() []api.EnvVar {
 }
 
 type EnvVarSharer struct {
-	logger      log.Logger
-	inputParser stepconf.InputParser
+	logger        log.Logger
+	inputParser   stepconf.InputParser
+	envRepository env.Repository
 }
 
-func NewEnvVarSharer(logger log.Logger, inputParser stepconf.InputParser) EnvVarSharer {
+func NewEnvVarSharer(logger log.Logger, inputParser stepconf.InputParser, envRepository env.Repository) EnvVarSharer {
 	return EnvVarSharer{
-		logger:      logger,
-		inputParser: inputParser,
+		logger:        logger,
+		inputParser:   inputParser,
+		envRepository: envRepository,
 	}
 }
 
-func (s EnvVarSharer) ProcessConfig() (*Config, error) {
+func (e EnvVarSharer) ProcessConfig() (*Config, error) {
 	var input Input
-	if err := s.inputParser.Parse(&input); err != nil {
+	if err := e.inputParser.Parse(&input); err != nil {
 		return nil, err
 	}
 
 	stepconf.Print(input)
-	s.logger.Println()
+	e.logger.Println()
 
-	envVars, err := parseEnvVars(input.EnvVars)
+	envVars, err := e.parseEnvVars(input.EnvVars)
 	if err != nil {
 		return nil, err
 	}
@@ -73,10 +76,10 @@ func (s EnvVarSharer) ProcessConfig() (*Config, error) {
 	}, nil
 }
 
-func (s EnvVarSharer) Run(config Config) error {
-	s.logger.Infof("Sharing %d env vars", len(config.EnvVars))
+func (e EnvVarSharer) Run(config Config) error {
+	e.logger.Infof("Sharing %d env vars", len(config.EnvVars))
 
-	client, err := api.NewBitriseClient(config.AppURL, config.BuildSlug, config.BuildAPIToken, s.logger)
+	client, err := api.NewBitriseClient(config.AppURL, config.BuildSlug, config.BuildAPIToken, e.logger)
 	if err != nil {
 		return err
 	}
@@ -85,24 +88,33 @@ func (s EnvVarSharer) Run(config Config) error {
 		return err
 	}
 
-	s.logger.Donef("Finished")
+	e.logger.Donef("Finished")
 
 	return nil
 }
 
-func parseEnvVars(s string) ([]EnvVar, error) {
+func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 	var envVars []EnvVar
 
 	lines := strings.Split(s, "\n")
 	for _, line := range lines {
 		split := strings.Split(line, "=")
-		if len(split) != 2 {
-			return nil, fmt.Errorf("env var should be in a format (KEY=value): %s", line)
+		if len(split) > 2 || len(split) == 0 {
+			return nil, fmt.Errorf("env var should be in a format: KEY=value or KEY: %s", line)
+		}
+
+		key := split[0]
+
+		var value string
+		if len(split) == 1 {
+			value = e.envRepository.Get(key)
+		} else {
+			value = split[1]
 		}
 
 		envVars = append(envVars, EnvVar{
-			Key:   split[0],
-			Value: split[1],
+			Key:   key,
+			Value: value,
 		})
 	}
 
