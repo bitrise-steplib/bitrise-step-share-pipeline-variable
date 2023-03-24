@@ -1,0 +1,23 @@
+format_version: 12
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  check:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-check.git: { }
+
+  sample:
+    steps:
+    - script:
+        inputs:
+        - content: envman add --key STEP_TMPDIR --value $(mktemp -d -t step-git-cloneXXXXXX)
+    - change-workdir:
+        title: Change directory to a temporary directory
+        inputs:
+        - path: $STEP_TMPDIR
+    - path::./:
+        inputs:
+        - env_vars: KEY=value
+        - app_url: mock
+        - build_slug: mock
+        - build_api_token: token

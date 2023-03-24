@@ -1,0 +1,100 @@
+package api
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+
+	"github.com/bitrise-io/go-utils/v2/log"
+	"github.com/bitrise-io/go-utils/v2/retryhttp"
+)
+
+type BitriseClient struct {
+	logger     log.Logger
+	httpClient *http.Client
+	url        url.URL
+	authToken  string
+}
+
+func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) (*BitriseClient, error) {
+	httpClient := retryhttp.NewClient(logger)
+	u, err := url.Parse(appURL)
+	if err != nil {
+		return nil, err
+	}
+	u = u.JoinPath(fmt.Sprintf("pipeline/workflow_builds/%s/env_vars", buildSLUG))
+	return &BitriseClient{
+		logger:     logger,
+		httpClient: httpClient.StandardClient(),
+		url:        *u,
+		authToken:  authToken,
+	}, nil
+}
+
+type EnvVar struct {
+	Key   string
+	Value string
+}
+
+type SharedEnvVar struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+type ShareEnvVarsRequest struct {
+	SharedEnvs []SharedEnvVar `json:"shared_envs"`
+}
+
+/*
+curl --show-error --fail -X POST \
+    "https://app.bitrise.io/app/$BITRISE_APP_SLUG/pipeline/workflow_builds/$BITRISE_BUILD_SLUG/env_vars" \
+    -H 'content-type: application/json; charset=UTF-8' \
+    -H "X-HTTP_BUILD_API_TOKEN: $BITRISE_BUILD_API_TOKEN" \
+    -d '{"shared_envs":[{"key":"WAY_OF_KINGS","value":"Life before Death...","is_expand":false}]}'
+*/
+
+func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
+	shareEnvVarsReq := ShareEnvVarsRequest{}
+	for _, envVar := range envVars {
+		shareEnvVarsReq.SharedEnvs = append(shareEnvVarsReq.SharedEnvs, SharedEnvVar{
+			Key:   envVar.Key,
+			Value: envVar.Value,
+		})
+	}
+
+	body, err := json.Marshal(shareEnvVarsReq)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, c.url.String(), bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("content-type", "application/json; charset=UTF-8")
+	req.Header.Set("X-HTTP_BUILD_API_TOKEN", c.authToken)
+
+	reqDump, err := httputil.DumpRequest(req, true)
+	if err == nil {
+		c.logger.Debugf("Request: %s", string(reqDump))
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+
+	respDump, err := httputil.DumpResponse(resp, true)
+	if err == nil {
+		c.logger.Debugf("Response: %s", string(respDump))
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("uploading env varsd returned a %d status", resp.StatusCode)
+	}
+
+	return nil
+}

@@ -1,0 +1,42 @@
+title: Share env vars between stages
+summary: Share environment variables between pipeline stages
+description: Share environment variables between pipeline stages
+
+website: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
+support_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/issues
+
+type_tags:
+  - utility
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
+
+inputs:
+  - env_vars:
+    opts:
+      title: Env vars
+      summary: Environment variables to be shared between stages
+      description: Environment variables to be shared between stages
+  - app_url: $BITRISE_APP_URL
+    opts:
+      title: Bitrise App URL
+      is_required: true
+      is_dont_change_value: true
+  - build_slug: $BITRISE_BUILD_SLUG
+    opts:
+      title: Bitrise Build Slug
+      is_required: true
+      is_dont_change_value: true
+  - build_api_token: "$BITRISE_BUILD_API_TOKEN"
+    opts:
+      category: Build Artifact Deployment
+      title: Bitrise Build API Token
+      summary: |-
+        The build's API Token for the build on Bitrise.io
+      description: |-
+        The build's API Token for the build on Bitrise.io
+      is_required: true
+      is_dont_change_value: true
+      is_sensitive: true
