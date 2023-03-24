@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
 
 	"github.com/bitrise-io/go-utils/v2/log"
 	"github.com/bitrise-io/go-utils/v2/retryhttp"
@@ -15,25 +14,18 @@ import (
 type BitriseClient struct {
 	logger     log.Logger
 	httpClient *http.Client
-	url        url.URL
+	url        string
 	authToken  string
 }
 
 func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) (*BitriseClient, error) {
 	httpClient := retryhttp.NewClient(logger)
-	u, err := url.Parse(appURL)
-	if err != nil {
-		return nil, err
-	}
-	u, err = u.Parse(fmt.Sprintf("pipeline/workflow_builds/%s/env_vars", buildSLUG))
-	if err != nil {
-		return nil, err
-	}
+	url := fmt.Sprintf("%s/pipeline/workflow_builds/%s/env_vars", appURL, buildSLUG)
 
 	return &BitriseClient{
 		logger:     logger,
 		httpClient: httpClient.StandardClient(),
-		url:        *u,
+		url:        url,
 		authToken:  authToken,
 	}, nil
 }
@@ -74,7 +66,7 @@ func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
 		return err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, c.url.String(), bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, c.url, bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}

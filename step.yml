@@ -17,8 +17,7 @@ inputs:
   - env_vars:
     opts:
       title: Env vars
-      summary: Environment variables to be shared between stages
-      description: Environment variables to be shared between stages
+      is_required: true
   - app_url: $BITRISE_APP_URL
     opts:
       title: Bitrise App URL
