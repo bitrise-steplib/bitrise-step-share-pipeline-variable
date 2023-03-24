@@ -56,10 +56,9 @@ func (s EnvVarSharer) ProcessConfig() (*Config, error) {
 	if err := s.inputParser.Parse(&input); err != nil {
 		return nil, err
 	}
+
 	stepconf.Print(input)
 	s.logger.Println()
-
-	s.logger.EnableDebugLog(true)
 
 	envVars, err := parseEnvVars(input.EnvVars)
 	if err != nil {
@@ -81,7 +80,14 @@ func (s EnvVarSharer) Run(config Config) error {
 	if err != nil {
 		return err
 	}
-	return client.ShareEnvVars(config.APIEnvVars())
+
+	if err := client.ShareEnvVars(config.APIEnvVars()); err != nil {
+		return err
+	}
+
+	s.logger.Donef("Finished")
+
+	return nil
 }
 
 func parseEnvVars(s string) ([]EnvVar, error) {
