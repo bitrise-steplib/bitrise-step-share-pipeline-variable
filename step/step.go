@@ -57,6 +57,7 @@ func (s EnvVarSharer) ProcessConfig() (*Config, error) {
 		return nil, err
 	}
 	stepconf.Print(input)
+	s.logger.Println()
 
 	s.logger.EnableDebugLog(true)
 
@@ -74,6 +75,8 @@ func (s EnvVarSharer) ProcessConfig() (*Config, error) {
 }
 
 func (s EnvVarSharer) Run(config Config) error {
+	s.logger.Infof("Sharing %d env vars", len(config.EnvVars))
+
 	client, err := api.NewBitriseClient(config.AppURL, config.BuildSlug, config.BuildAPIToken, s.logger)
 	if err != nil {
 		return err

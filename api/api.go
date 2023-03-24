@@ -76,6 +76,7 @@ func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
 	reqDump, err := httputil.DumpRequest(req, true)
 	if err == nil {
 		c.logger.Debugf("Request: %s", string(reqDump))
+		c.logger.Debugf("")
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -86,6 +87,7 @@ func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
 	respDump, err := httputil.DumpResponse(resp, true)
 	if err == nil {
 		c.logger.Debugf("Response: %s", string(respDump))
+		c.logger.Debugf("")
 	}
 
 	if resp.StatusCode != http.StatusOK {
