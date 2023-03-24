@@ -90,9 +90,16 @@ func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
 		c.logger.Debugf("")
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("uploading env varsd returned a %d status", resp.StatusCode)
+	if err := checkEnvVarShareResponse(resp); err != nil {
+		return err
 	}
 
 	return nil
+}
+
+func checkEnvVarShareResponse(resp *http.Response) error {
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+		return nil
+	}
+	return fmt.Errorf("unsuccessful status: %d", resp.StatusCode)
 }
