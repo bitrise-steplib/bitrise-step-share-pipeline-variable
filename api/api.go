@@ -17,16 +17,16 @@ type BitriseClient struct {
 	authToken  string
 }
 
-func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) (*BitriseClient, error) {
+func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) BitriseClient {
 	httpClient := retryhttp.NewClient(logger)
 	url := fmt.Sprintf("%s/pipeline/workflow_builds/%s/env_vars", appURL, buildSLUG)
 
-	return &BitriseClient{
+	return BitriseClient{
 		logger:     logger,
 		httpClient: httpClient.StandardClient(),
 		url:        url,
 		authToken:  authToken,
-	}, nil
+	}
 }
 
 type EnvVar struct {
@@ -80,5 +80,5 @@ func checkEnvVarShareResponse(resp *http.Response) error {
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		return nil
 	}
-	return fmt.Errorf("unsuccessful status: %d", resp.StatusCode)
+	return fmt.Errorf("request failed with status: %d", resp.StatusCode)
 }

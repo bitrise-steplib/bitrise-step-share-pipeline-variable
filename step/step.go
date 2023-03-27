@@ -79,11 +79,7 @@ func (e EnvVarSharer) ProcessConfig() (*Config, error) {
 func (e EnvVarSharer) Run(config Config) error {
 	e.logger.Infof("Sharing %d env vars", len(config.EnvVars))
 
-	client, err := api.NewBitriseClient(config.AppURL, config.BuildSlug, config.BuildAPIToken, e.logger)
-	if err != nil {
-		return err
-	}
-
+	client := api.NewBitriseClient(config.AppURL, config.BuildSlug, config.BuildAPIToken, e.logger)
 	if err := client.ShareEnvVars(config.APIEnvVars()); err != nil {
 		return err
 	}
