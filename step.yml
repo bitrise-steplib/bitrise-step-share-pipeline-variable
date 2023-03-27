@@ -31,7 +31,6 @@ inputs:
         MY_ENV_KEY=my value
         EXISTING_ENV_KEY
         ```
-
       is_required: true
   - app_url: $BITRISE_APP_URL
     opts:
