@@ -16,7 +16,7 @@ func TestBitriseClient_ShareEnvVars_SuccessfulRequest(t *testing.T) {
 	apiToken := "token"
 	envVarKey := "KEY"
 	envVarValue := "value"
-	envVars := []EnvVar{{Key: envVarKey, Value: envVarValue}}
+	envVars := []SharedEnvVar{{Key: envVarKey, Value: envVarValue}}
 
 	serverCalled := false
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +66,7 @@ func TestBitriseClient_ShareEnvVars_FailingRequest(t *testing.T) {
 	apiToken := "token"
 	envVarKey := "KEY"
 	envVarValue := "value"
-	envVars := []EnvVar{{Key: envVarKey, Value: envVarValue}}
+	envVars := []SharedEnvVar{{Key: envVarKey, Value: envVarValue}}
 
 	serverCalled := false
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -29,11 +29,6 @@ func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) Bi
 	}
 }
 
-type EnvVar struct {
-	Key   string
-	Value string
-}
-
 type SharedEnvVar struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
@@ -43,15 +38,9 @@ type ShareEnvVarsRequest struct {
 	SharedEnvs []SharedEnvVar `json:"shared_envs"`
 }
 
-func (c BitriseClient) ShareEnvVars(envVars []EnvVar) error {
-	shareEnvVarsReq := ShareEnvVarsRequest{}
-	for _, envVar := range envVars {
-		shareEnvVarsReq.SharedEnvs = append(shareEnvVarsReq.SharedEnvs, SharedEnvVar{
-			Key:   envVar.Key,
-			Value: envVar.Value,
-		})
-	}
-
+func (c BitriseClient) ShareEnvVars(envVars []SharedEnvVar) error {
+	shareEnvVarsReq := ShareEnvVarsRequest{SharedEnvs: envVars}
+	
 	body, err := json.Marshal(shareEnvVarsReq)
 	if err != nil {
 		return err

@@ -29,10 +29,10 @@ type Config struct {
 	BuildAPIToken string
 }
 
-func (c Config) APIEnvVars() []api.EnvVar {
-	var apiEnvVars []api.EnvVar
+func (c Config) APIEnvVars() []api.SharedEnvVar {
+	var apiEnvVars []api.SharedEnvVar
 	for _, envVar := range c.EnvVars {
-		apiEnvVars = append(apiEnvVars, api.EnvVar{
+		apiEnvVars = append(apiEnvVars, api.SharedEnvVar{
 			Key:   envVar.Key,
 			Value: envVar.Value,
 		})
