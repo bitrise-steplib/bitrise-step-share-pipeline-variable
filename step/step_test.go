@@ -1,12 +1,15 @@
 package step
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/log"
 	"github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/mocks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEnvVarSharer_ProcessConfig(t *testing.T) {
@@ -116,6 +119,55 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ProcessConfig() got = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestEnvVarSharer_Run(t *testing.T) {
+	tests := []struct {
+		name    string
+		config  Config
+		wantErr bool
+	}{
+		{
+			name: "API gets called",
+			config: Config{
+				EnvVars:       []EnvVar{{Key: "ENV_KEY", Value: "env_value"}},
+				BuildSlug:     "slug",
+				BuildAPIToken: "token",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Failing response",
+			config: Config{
+				EnvVars:   []EnvVar{{Key: "ENV_KEY", Value: "env_value"}},
+				BuildSlug: "slug",
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			serverCalled := false
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if tt.config.BuildAPIToken == "" {
+					w.WriteHeader(http.StatusBadRequest)
+				} else {
+					w.WriteHeader(http.StatusNoContent)
+				}
+				serverCalled = true
+			}))
+			defer server.Close()
+
+			e := EnvVarSharer{
+				logger: log.NewLogger(),
+			}
+			tt.config.AppURL = server.URL
+			if err := e.Run(tt.config); (err != nil) != tt.wantErr {
+				t.Errorf("Run() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			require.Equal(t, true, serverCalled)
 		})
 	}
 }
