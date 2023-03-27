@@ -7,49 +7,48 @@ source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-
 support_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/issues
 
 type_tags:
-  - utility
+- utility
 
 toolkit:
   go:
     package_name: github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
 
 inputs:
-  - env_vars:
-    opts:
-      title: Env vars to share between pipeline stages
-      summary: |-
-        A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
-      description: |-
-        A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
-        
-        The input uses a `{key}={value}` syntax.
-        The equals sign (`=`) is the delimiter between the key and value of the environment variable.
-        A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).
-        
-        Examples:
-        ```
-        MY_ENV_KEY=my value
-        EXISTING_ENV_KEY
-        ```
-      is_required: true
-  - app_url: $BITRISE_APP_URL
-    opts:
-      title: Bitrise App URL
-      is_required: true
-      is_dont_change_value: true
-  - build_slug: $BITRISE_BUILD_SLUG
-    opts:
-      title: Bitrise Build Slug
-      is_required: true
-      is_dont_change_value: true
-  - build_api_token: "$BITRISE_BUILD_API_TOKEN"
-    opts:
-      category: Build Artifact Deployment
-      title: Bitrise Build API Token
-      summary: |-
-        The build's API Token for the build on Bitrise.io
-      description: |-
-        The build's API Token for the build on Bitrise.io
-      is_required: true
-      is_dont_change_value: true
-      is_sensitive: true
+- env_vars:
+  opts:
+    title: Env vars to share between pipeline stages
+    summary: |-
+      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+    description: |-
+      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+
+      The input uses a `{key}={value}` syntax.
+      The equals sign (`=`) is the delimiter between the key and value of the environment variable.
+      A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).
+
+      Examples:
+      ```
+      MY_ENV_KEY=my value
+      EXISTING_ENV_KEY
+      ```
+    is_required: true
+- app_url: $BITRISE_APP_URL
+  opts:
+    title: Bitrise App URL
+    summary: The app's URL on Bitrise.io.
+    is_required: true
+    is_dont_change_value: true
+- build_slug: $BITRISE_BUILD_SLUG
+  opts:
+    title: Bitrise Build Slug
+    summary: The build's slug on Bitrise.io.
+    is_required: true
+    is_dont_change_value: true
+- build_api_token: $BITRISE_BUILD_API_TOKEN
+  opts:
+    category: Build Artifact Deployment
+    title: Bitrise Build API Token
+    summary: API Token for the build on Bitrise.io.
+    is_required: true
+    is_dont_change_value: true
+    is_sensitive: true
