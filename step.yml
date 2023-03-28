@@ -14,7 +14,7 @@ toolkit:
     package_name: github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 
 inputs:
-- env_vars:
+- variables:
   opts:
     title: Env vars to share between pipeline stages
     summary: |-

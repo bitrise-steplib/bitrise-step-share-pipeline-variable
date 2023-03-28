@@ -22,7 +22,7 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 		{
 			name: "Simple inputs",
 			envs: map[string]string{
-				"env_vars":        "MY_ENV_KEY=my value",
+				"variables":       "MY_ENV_KEY=my value",
 				"app_url":         "https://app.bitrise.io/app/abcd",
 				"build_slug":      "asdf",
 				"build_api_token": "1234",
@@ -39,7 +39,7 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 			name: "Existing env sharing",
 			envs: map[string]string{
 				"EXISTING_ENV_KEY": "existing env",
-				"env_vars":         "EXISTING_ENV_KEY",
+				"variables":        "EXISTING_ENV_KEY",
 				"app_url":          "https://app.bitrise.io/app/abcd",
 				"build_slug":       "asdf",
 				"build_api_token":  "1234",
@@ -53,9 +53,9 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "env_vars is required",
+			name: "variables is required",
 			envs: map[string]string{
-				"env_vars":        "",
+				"variables":       "",
 				"app_url":         "https://app.bitrise.io/app/abcd",
 				"build_slug":      "asdf",
 				"build_api_token": "1234",
@@ -66,7 +66,7 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 		{
 			name: "app_url is required",
 			envs: map[string]string{
-				"env_vars":        "MY_ENV_KEY=my value",
+				"variables":       "MY_ENV_KEY=my value",
 				"app_url":         "",
 				"build_slug":      "asdf",
 				"build_api_token": "1234",
@@ -77,7 +77,7 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 		{
 			name: "build_slug is required",
 			envs: map[string]string{
-				"env_vars":        "MY_ENV_KEY=my value",
+				"variables":       "MY_ENV_KEY=my value",
 				"app_url":         "https://app.bitrise.io/app/abcd",
 				"build_slug":      "",
 				"build_api_token": "1234",
@@ -88,7 +88,7 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 		{
 			name: "build_api_token is required",
 			envs: map[string]string{
-				"env_vars":        "MY_ENV_KEY=my value",
+				"variables":       "MY_ENV_KEY=my value",
 				"app_url":         "https://app.bitrise.io/app/abcd",
 				"build_slug":      "asdf",
 				"build_api_token": "",

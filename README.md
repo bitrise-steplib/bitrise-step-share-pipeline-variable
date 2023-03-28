@@ -23,7 +23,7 @@ You can also run this step directly with [Bitrise CLI](https://github.com/bitris
 
 | Key | Description | Flags | Default |
 | --- | --- | --- | --- |
-| `env_vars` | A newline (`\n`) separated list of key - value pairs (`{key}={value}`).  The input uses a `{key}={value}` syntax. The equals sign (`=`) is the delimiter between the key and value of the environment variable. A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).  Examples: ``` MY_ENV_KEY=my value EXISTING_ENV_KEY ``` | required |  |
+| `variables` | A newline (`\n`) separated list of key - value pairs (`{key}={value}`).  The input uses a `{key}={value}` syntax. The equals sign (`=`) is the delimiter between the key and value of the environment variable. A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).  Examples: ``` MY_ENV_KEY=my value EXISTING_ENV_KEY ``` | required |  |
 | `app_url` | The app's URL on Bitrise.io. | required | `$BITRISE_APP_URL` |
 | `build_slug` | The build's slug on Bitrise.io. | required | `$BITRISE_BUILD_SLUG` |
 | `build_api_token` | API Token for the build on Bitrise.io. | required, sensitive | `$BITRISE_BUILD_API_TOKEN` |

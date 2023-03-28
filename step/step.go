@@ -11,7 +11,7 @@ import (
 )
 
 type Input struct {
-	EnvVars       string `env:"env_vars,required"`
+	EnvVars       string `env:"variables,required"`
 	AppURL        string `env:"app_url,required"`
 	BuildSlug     string `env:"build_slug,required"`
 	BuildAPIToken string `env:"build_api_token,required"`

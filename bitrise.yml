@@ -17,7 +17,7 @@ workflows:
         - path: $STEP_TMPDIR
     - path::./:
         inputs:
-        - env_vars: KEY=value
+        - variables: KEY=value
 
   generate_readme:
     steps:
