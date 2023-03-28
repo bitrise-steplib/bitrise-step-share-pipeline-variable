@@ -2,16 +2,16 @@ title: Share env vars between stages
 summary: Share environment variables between pipeline stages
 description: Share environment variables between pipeline stages
 
-website: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
-source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
-support_url: https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/issues
+website: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
+support_url: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/issues
 
 type_tags:
 - utility
 
 toolkit:
   go:
-    package_name: github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
+    package_name: github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 
 inputs:
 - env_vars:

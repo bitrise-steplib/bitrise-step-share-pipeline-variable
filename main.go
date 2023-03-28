@@ -9,7 +9,7 @@ import (
 	"github.com/bitrise-io/go-utils/v2/errorutil"
 	. "github.com/bitrise-io/go-utils/v2/exitcode"
 	"github.com/bitrise-io/go-utils/v2/log"
-	"github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/step"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/step"
 )
 
 func main() {

@@ -7,7 +7,7 @@ import (
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
-	"github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/api"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
 )
 
 type Input struct {

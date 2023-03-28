@@ -1,4 +1,4 @@
-module github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages
+module github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 
 go 1.19
 

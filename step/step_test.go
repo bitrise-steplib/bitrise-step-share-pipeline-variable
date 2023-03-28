@@ -8,7 +8,7 @@ import (
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/log"
-	"github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/mocks"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/mocks"
 	"github.com/stretchr/testify/require"
 )
 

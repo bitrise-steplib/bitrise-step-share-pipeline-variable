@@ -1,6 +1,6 @@
 # Share env vars between stages
 
-[![Step changelog](https://shields.io/github/v/release/bitrise-steplib/bitrise-step-share-env-vars-between-stages?include_prereleases&label=changelog&color=blueviolet)](https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/releases)
+[![Step changelog](https://shields.io/github/v/release/bitrise-steplib/bitrise-step-share-pipeline-variable?include_prereleases&label=changelog&color=blueviolet)](https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/releases)
 
 Share environment variables between pipeline stages
 
@@ -36,7 +36,7 @@ There are no outputs defined in this step
 
 ## 🙋 Contributing
 
-We welcome [pull requests](https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/pulls) and [issues](https://github.com/bitrise-steplib/bitrise-step-share-env-vars-between-stages/issues) against this repository.
+We welcome [pull requests](https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/pulls) and [issues](https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/issues) against this repository.
 
 For pull requests, work on your changes in a forked repository and use the Bitrise CLI to [run step tests locally](https://devcenter.bitrise.io/bitrise-cli/run-your-first-build/).
 
