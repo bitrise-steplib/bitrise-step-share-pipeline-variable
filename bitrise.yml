@@ -18,6 +18,3 @@ workflows:
     - path::./:
         inputs:
         - env_vars: KEY=value
-        - app_url: mock
-        - build_slug: mock
-        - build_api_token: token
