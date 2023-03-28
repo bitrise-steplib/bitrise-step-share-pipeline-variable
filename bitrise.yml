@@ -18,3 +18,7 @@ workflows:
     - path::./:
         inputs:
         - env_vars: KEY=value
+
+  generate_readme:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-readme-generator.git@main: { }
