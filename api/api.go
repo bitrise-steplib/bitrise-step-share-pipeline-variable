@@ -40,7 +40,7 @@ type ShareEnvVarsRequest struct {
 
 func (c BitriseClient) ShareEnvVars(envVars []SharedEnvVar) error {
 	shareEnvVarsReq := ShareEnvVarsRequest{SharedEnvs: envVars}
-	
+
 	body, err := json.Marshal(shareEnvVarsReq)
 	if err != nil {
 		return err
@@ -69,5 +69,5 @@ func checkEnvVarShareResponse(resp *http.Response) error {
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		return nil
 	}
-	return fmt.Errorf("request failed with status: %d", resp.StatusCode)
+	return fmt.Errorf("request to %s failed: status code should be 2xx (%d)", resp.Request.URL, resp.StatusCode)
 }

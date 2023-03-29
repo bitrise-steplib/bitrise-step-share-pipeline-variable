@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -78,6 +79,6 @@ func TestBitriseClient_ShareEnvVars_FailingRequest(t *testing.T) {
 	c := NewBitriseClient(server.URL, buildSlug, apiToken, log.NewLogger())
 	err := c.ShareEnvVars(envVars)
 	require.Error(t, err)
-	require.Equal(t, "request failed with status: 400", err.Error())
+	require.Equal(t, fmt.Sprintf("request to %s/pipeline/workflow_builds/slug/env_vars failed: status code should be 2xx (400)", server.URL), err.Error())
 	require.Equal(t, true, serverCalled)
 }

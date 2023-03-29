@@ -1,6 +1,9 @@
-title: Share env vars between stages
-summary: Share environment variables between pipeline stages
-description: Share environment variables between pipeline stages
+title: Share Pipeline variables
+summary: Share environment variables between Pipeline Stages.
+description: |-
+  Share environment variables between Pipeline Stages.
+  
+  Variables shared by the Step will be available in subsequent stages workflow's as [one-off env vars](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-a-custom-env-var-when-starting-a-build) as if provided manually on the website. 
 
 website: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
@@ -16,7 +19,7 @@ toolkit:
 inputs:
 - variables:
   opts:
-    title: Env vars to share between pipeline stages
+    title: Variables to share between Pipeline Stages
     summary: |-
       A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
     description: |-
@@ -50,5 +53,5 @@ inputs:
     title: Bitrise Build API Token
     summary: API Token for the build on Bitrise.io.
     is_required: true
-    is_dont_change_value: true
     is_sensitive: true
+    is_dont_change_value: true
