@@ -1,0 +1,57 @@
+title: Share Pipeline variables
+summary: Share environment variables between Pipeline Stages.
+description: |-
+  Share environment variables between Pipeline Stages.
+
+  Variables shared by the Step will be available in subsequent stages workflow's as [one-off env vars](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-a-custom-env-var-when-starting-a-build) as if provided manually on the website.
+
+website: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
+support_url: https://github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/issues
+
+type_tags:
+- utility
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
+
+inputs:
+- variables:
+  opts:
+    title: Variables to share between Pipeline Stages
+    summary: |-
+      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+    description: |-
+      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+
+      The input uses a `{key}={value}` syntax.
+      The equals sign (`=`) is the delimiter between the key and value of the environment variable.
+      A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).
+
+      Examples:
+      ```
+      MY_ENV_KEY=my value
+      EXISTING_ENV_KEY
+      ```
+    is_required: true
+- app_url: $BITRISE_APP_URL
+  opts:
+    title: Bitrise App URL
+    summary: The app's URL on Bitrise.io.
+    is_required: true
+    is_dont_change_value: true
+- build_slug: $BITRISE_BUILD_SLUG
+  opts:
+    title: Bitrise Build Slug
+    summary: The build's slug on Bitrise.io.
+    is_required: true
+    is_dont_change_value: true
+- build_api_token: $BITRISE_BUILD_API_TOKEN
+  opts:
+    category: Build Artifact Deployment
+    title: Bitrise Build API Token
+    summary: API Token for the build on Bitrise.io.
+    is_required: true
+    is_sensitive: true
+    is_dont_change_value: true
