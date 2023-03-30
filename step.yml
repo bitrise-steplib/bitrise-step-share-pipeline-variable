@@ -49,7 +49,6 @@ inputs:
     is_dont_change_value: true
 - build_api_token: $BITRISE_BUILD_API_TOKEN
   opts:
-    category: Build Artifact Deployment
     title: Bitrise Build API Token
     summary: API Token for the build on Bitrise.io.
     is_required: true
