@@ -95,8 +95,9 @@ func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 	lines := strings.Split(s, "\n")
 	for _, line := range lines {
 		split := strings.Split(line, "=")
-		if len(split) > 2 || len(split) == 0 {
-			return nil, fmt.Errorf("env var should be in a format: KEY=value or KEY: %s", line)
+		// empty line
+		if len(split) == 0 {
+			continue;
 		}
 
 		key := split[0]
@@ -105,7 +106,7 @@ func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 		if len(split) == 1 {
 			value = e.envRepository.Get(key)
 		} else {
-			value = split[1]
+			value = strings.join("=", split[1..])
 		}
 
 		envVars = append(envVars, EnvVar{
