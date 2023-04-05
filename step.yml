@@ -26,7 +26,7 @@ inputs:
       A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
 
       The input uses a `{key}={value}` syntax.
-      The equals sign (`=`) is the delimiter between the key and value of the environment variable.
+      The first equals sign (`=`) is the delimiter between the key and value of the environment variable.
       A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).
 
       Examples:
