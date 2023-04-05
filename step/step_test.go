@@ -36,6 +36,22 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "Multiple = inputs",
+			envs: map[string]string{
+				"variables":       "MY_ENV_KEY=my value that contains = so that we can have (=^･ｪ･^=))ﾉ彡☆",
+				"app_url":         "https://app.bitrise.io/app/abcd",
+				"build_slug":      "asdf",
+				"build_api_token": "1234",
+			},
+			want: &Config{
+				EnvVars:       []EnvVar{{Key: "MY_ENV_KEY", Value: "my value that contains = so that we can have (=^･ｪ･^=))ﾉ彡☆"}},
+				AppURL:        "https://app.bitrise.io/app/abcd",
+				BuildSlug:     "asdf",
+				BuildAPIToken: "1234",
+			},
+			wantErr: false,
+		},
+		{
 			name: "Existing env sharing",
 			envs: map[string]string{
 				"EXISTING_ENV_KEY": "existing env",
