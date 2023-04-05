@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
+
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
-	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
 )
 
 type Input struct {
@@ -94,19 +95,18 @@ func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 
 	lines := strings.Split(s, "\n")
 	for _, line := range lines {
-		split := strings.Split(line, "=")
+		key, value, found := strings.Cut(line, "=")
 		// empty line
-		if len(split) == 0 {
-			continue;
+		if key == "" {
+			if found {
+				return nil, fmt.Errorf("env var should be in a format: KEY=value or KEY: %s", line)
+			} else {
+				// empty line is ignored
+				continue
+			}
 		}
-
-		key := split[0]
-
-		var value string
-		if len(split) == 1 {
+		if value == "" {
 			value = e.envRepository.Get(key)
-		} else {
-			value = strings.join("=", split[1..])
 		}
 
 		envVars = append(envVars, EnvVar{

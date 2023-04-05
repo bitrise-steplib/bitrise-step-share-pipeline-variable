@@ -6,10 +6,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bitrise-io/go-steputils/v2/stepconf"
-	"github.com/bitrise-io/go-utils/v2/log"
 	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/mocks"
 	"github.com/stretchr/testify/require"
+
+	"github.com/bitrise-io/go-steputils/v2/stepconf"
+	"github.com/bitrise-io/go-utils/v2/log"
 )
 
 func TestEnvVarSharer_ProcessConfig(t *testing.T) {
@@ -44,7 +45,12 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 				"build_api_token": "1234",
 			},
 			want: &Config{
-				EnvVars:       []EnvVar{{Key: "MY_ENV_KEY", Value: "my value that contains = so that we can have (=^･ｪ･^=))ﾉ彡☆"}},
+				EnvVars: []EnvVar{
+					{
+						Key:   "MY_ENV_KEY",
+						Value: "my value that contains = so that we can have (=^･ｪ･^=))ﾉ彡☆",
+					},
+				},
 				AppURL:        "https://app.bitrise.io/app/abcd",
 				BuildSlug:     "asdf",
 				BuildAPIToken: "1234",
@@ -67,6 +73,17 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 				BuildAPIToken: "1234",
 			},
 			wantErr: false,
+		},
+		{
+			name: "variables can't start with =",
+			envs: map[string]string{
+				"variables":       "=some_key=some_value",
+				"app_url":         "https://app.bitrise.io/app/abcd",
+				"build_slug":      "asdf",
+				"build_api_token": "1234",
+			},
+			want:    nil,
+			wantErr: true,
 		},
 		{
 			name: "variables is required",
