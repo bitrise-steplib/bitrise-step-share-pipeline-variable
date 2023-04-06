@@ -95,15 +95,16 @@ func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 
 	lines := strings.Split(s, "\n")
 	for _, line := range lines {
-		key, value, found := strings.Cut(line, "=")
-		// empty line
+		line = strings.TrimSpace(line)
+		if line == "" { 
+			// empty line is ignored 
+			continue 
+		}
+		
+		key, value, _ := strings.Cut(line, "=")
 		if key == "" {
-			if found {
-				return nil, fmt.Errorf("env var should be in a format: KEY=value or KEY: %s", line)
-			} else {
-				// empty line is ignored
-				continue
-			}
+			// line starting with = is invalid
+			return nil, fmt.Errorf("env var should be in a format: KEY=value or KEY: %s", line)
 		}
 		if value == "" {
 			value = e.envRepository.Get(key)
