@@ -16,6 +16,8 @@ toolkit:
   go:
     package_name: github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 
+is_always_run: false
+
 inputs:
 - variables:
   opts:
