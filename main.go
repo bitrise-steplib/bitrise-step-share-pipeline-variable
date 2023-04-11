@@ -34,6 +34,8 @@ func run() ExitCode {
 		return Failure
 	}
 
+	fmt.Println("test")
+
 	return Success
 }
 
