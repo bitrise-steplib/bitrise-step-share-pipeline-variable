@@ -30,8 +30,9 @@ func NewBitriseClient(appURL, buildSLUG, authToken string, logger log.Logger) Bi
 }
 
 type SharedEnvVar struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key       string `json:"key"`
+	Value     string `json:"value"`
+	Sensitive bool   `json:"is_sensitive"`
 }
 
 type ShareEnvVarsRequest struct {

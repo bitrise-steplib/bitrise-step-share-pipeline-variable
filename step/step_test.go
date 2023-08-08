@@ -9,6 +9,7 @@ import (
 	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/mocks"
 	"github.com/stretchr/testify/require"
 
+	"github.com/bitrise-io/go-steputils/v2/secretkeys"
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/log"
 )
@@ -133,16 +134,19 @@ func TestEnvVarSharer_ProcessConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			envRepository := new(mocks.Repository)
+			envRepository.On("Get", "BITRISE_SECRET_ENV_KEY_LIST").Return("")
 			for key, value := range tt.envs {
 				envRepository.On("Get", key).Return(value)
 			}
 
 			inputParser := stepconf.NewInputParser(envRepository)
+			secretKeysProvider := secretkeys.NewManager()
 
 			e := EnvVarSharer{
-				logger:        log.NewLogger(),
-				inputParser:   inputParser,
-				envRepository: envRepository,
+				logger:             log.NewLogger(),
+				inputParser:        inputParser,
+				envRepository:      envRepository,
+				secretKeysProvider: secretKeysProvider,
 			}
 			got, err := e.ProcessConfig()
 			if (err != nil) != tt.wantErr {
@@ -165,7 +169,7 @@ func TestEnvVarSharer_Run(t *testing.T) {
 		{
 			name: "API gets called",
 			config: Config{
-				EnvVars:       []EnvVar{{Key: "ENV_KEY", Value: "env_value"}},
+				EnvVars:       []EnvVar{{Key: "ENV_KEY", Value: "env_value", Sensitive: false}},
 				BuildSlug:     "slug",
 				BuildAPIToken: "token",
 			},
@@ -174,7 +178,7 @@ func TestEnvVarSharer_Run(t *testing.T) {
 		{
 			name: "Failing response",
 			config: Config{
-				EnvVars:   []EnvVar{{Key: "ENV_KEY", Value: "env_value"}},
+				EnvVars:   []EnvVar{{Key: "ENV_KEY", Value: "env_value", Sensitive: false}},
 				BuildSlug: "slug",
 			},
 			wantErr: true,

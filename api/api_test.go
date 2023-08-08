@@ -15,9 +15,17 @@ import (
 func TestBitriseClient_ShareEnvVars_SuccessfulRequest(t *testing.T) {
 	buildSlug := "slug"
 	apiToken := "token"
-	envVarKey := "KEY"
-	envVarValue := "value"
-	envVars := []SharedEnvVar{{Key: envVarKey, Value: envVarValue}}
+	envVar1 := SharedEnvVar{
+		Key:       "KEY",
+		Value:     "value",
+		Sensitive: false,
+	}
+	envVar2 := SharedEnvVar{
+		Key:       "SECRET_KEY",
+		Value:     "secret value",
+		Sensitive: true,
+	}
+	envVars := []SharedEnvVar{envVar1, envVar2}
 
 	serverCalled := false
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -37,8 +45,9 @@ func TestBitriseClient_ShareEnvVars_SuccessfulRequest(t *testing.T) {
 
 		var body struct {
 			Envs []struct {
-				Key   string `json:"key"`
-				Value string `json:"value"`
+				Key       string `json:"key"`
+				Value     string `json:"value"`
+				Sensitive bool   `json:"is_sensitive"`
 			} `json:"shared_envs"`
 		}
 
@@ -48,9 +57,13 @@ func TestBitriseClient_ShareEnvVars_SuccessfulRequest(t *testing.T) {
 		err = json.Unmarshal(requestBody, &body)
 		require.NoError(t, err)
 
-		require.Equal(t, 1, len(body.Envs))
-		require.Equal(t, envVarKey, body.Envs[0].Key)
-		require.Equal(t, envVarValue, body.Envs[0].Value)
+		require.Equal(t, 2, len(body.Envs))
+		require.Equal(t, envVar1.Key, body.Envs[0].Key)
+		require.Equal(t, envVar1.Value, body.Envs[0].Value)
+		require.Equal(t, envVar1.Sensitive, body.Envs[0].Sensitive)
+		require.Equal(t, envVar2.Key, body.Envs[1].Key)
+		require.Equal(t, envVar2.Value, body.Envs[1].Value)
+		require.Equal(t, envVar2.Sensitive, body.Envs[1].Sensitive)
 
 		w.WriteHeader(http.StatusNoContent)
 	}))
