@@ -72,7 +72,7 @@ func (e EnvVarSharer) ProcessConfig() (*Config, error) {
 	secretKeys := e.secretKeysProvider.Load(e.envRepository)
 
 	if len(secretKeys) == 0 {
-		e.logger.Infof("Secret keys list is empty.")
+		e.logger.Printf("Secret keys list is empty.")
 	}
 
 	envVars, err := e.parseEnvVars(input.EnvVars, secretKeys)
