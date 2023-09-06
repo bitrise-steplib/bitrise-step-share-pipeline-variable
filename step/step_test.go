@@ -6,12 +6,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/mocks"
-	"github.com/stretchr/testify/require"
-
 	"github.com/bitrise-io/go-steputils/v2/secretkeys"
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/log"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/mocks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEnvVarSharer_ProcessConfig(t *testing.T) {

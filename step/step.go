@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"golang.org/x/exp/slices"
-
-	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
-
 	"github.com/bitrise-io/go-steputils/v2/secretkeys"
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
+	"golang.org/x/exp/slices"
 )
 
 type Input struct {
@@ -74,10 +72,10 @@ func (e EnvVarSharer) ProcessConfig() (*Config, error) {
 	secretKeys := e.secretKeysProvider.Load(e.envRepository)
 
 	if len(secretKeys) == 0 {
-		e.logger.Debugf("Secret keys list is empty.")
+		e.logger.Infof("Secret keys list is empty.")
 	}
 
-	envVars, err := e.parseEnvVars(secretKeys, input.EnvVars)
+	envVars, err := e.parseEnvVars(input.EnvVars, secretKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +101,7 @@ func (e EnvVarSharer) Run(config Config) error {
 	return nil
 }
 
-func (e EnvVarSharer) parseEnvVars(secretKeys []string, input string) ([]EnvVar, error) {
+func (e EnvVarSharer) parseEnvVars(input string, secretKeys []string) ([]EnvVar, error) {
 	var envVars []EnvVar
 
 	lines := strings.Split(input, "\n")
