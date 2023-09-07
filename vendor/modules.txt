@@ -1,5 +1,6 @@
-# github.com/bitrise-io/go-steputils/v2 v2.0.0-alpha.17
+# github.com/bitrise-io/go-steputils/v2 v2.0.0-alpha.19
 ## explicit; go 1.17
+github.com/bitrise-io/go-steputils/v2/secretkeys
 github.com/bitrise-io/go-steputils/v2/stepconf
 # github.com/bitrise-io/go-utils/v2 v2.0.0-alpha.16
 ## explicit; go 1.17
@@ -29,6 +30,10 @@ github.com/stretchr/objx
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
+# golang.org/x/exp v0.0.0-20230807204917-050eac23e9de
+## explicit; go 1.20
+golang.org/x/exp/constraints
+golang.org/x/exp/slices
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

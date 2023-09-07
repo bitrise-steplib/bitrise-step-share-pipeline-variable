@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
-
+	"github.com/bitrise-io/go-steputils/v2/secretkeys"
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
+	"github.com/bitrise-steplib/bitrise-step-share-pipeline-variable/api"
+	"golang.org/x/exp/slices"
 )
 
 type Input struct {
@@ -19,8 +20,9 @@ type Input struct {
 }
 
 type EnvVar struct {
-	Key   string
-	Value string
+	Key       string
+	Value     string
+	Sensitive bool
 }
 
 type Config struct {
@@ -34,24 +36,27 @@ func (c Config) APIEnvVars() []api.SharedEnvVar {
 	var apiEnvVars []api.SharedEnvVar
 	for _, envVar := range c.EnvVars {
 		apiEnvVars = append(apiEnvVars, api.SharedEnvVar{
-			Key:   envVar.Key,
-			Value: envVar.Value,
+			Key:       envVar.Key,
+			Value:     envVar.Value,
+			Sensitive: envVar.Sensitive,
 		})
 	}
 	return apiEnvVars
 }
 
 type EnvVarSharer struct {
-	logger        log.Logger
-	inputParser   stepconf.InputParser
-	envRepository env.Repository
+	logger             log.Logger
+	inputParser        stepconf.InputParser
+	envRepository      env.Repository
+	secretKeysProvider secretkeys.Manager
 }
 
-func NewEnvVarSharer(logger log.Logger, inputParser stepconf.InputParser, envRepository env.Repository) EnvVarSharer {
+func NewEnvVarSharer(logger log.Logger, inputParser stepconf.InputParser, envRepository env.Repository, secretKeysProvider secretkeys.Manager) EnvVarSharer {
 	return EnvVarSharer{
-		logger:        logger,
-		inputParser:   inputParser,
-		envRepository: envRepository,
+		logger:             logger,
+		inputParser:        inputParser,
+		envRepository:      envRepository,
+		secretKeysProvider: secretKeysProvider,
 	}
 }
 
@@ -64,7 +69,13 @@ func (e EnvVarSharer) ProcessConfig() (*Config, error) {
 	stepconf.Print(input)
 	e.logger.Println()
 
-	envVars, err := e.parseEnvVars(input.EnvVars)
+	secretKeys := e.secretKeysProvider.Load(e.envRepository)
+
+	if len(secretKeys) == 0 {
+		e.logger.Printf("Secret keys list is empty.")
+	}
+
+	envVars, err := e.parseEnvVars(input.EnvVars, secretKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -90,17 +101,17 @@ func (e EnvVarSharer) Run(config Config) error {
 	return nil
 }
 
-func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
+func (e EnvVarSharer) parseEnvVars(input string, secretKeys []string) ([]EnvVar, error) {
 	var envVars []EnvVar
 
-	lines := strings.Split(s, "\n")
+	lines := strings.Split(input, "\n")
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if line == "" { 
-			// empty line is ignored 
-			continue 
+		if line == "" {
+			// empty line is ignored
+			continue
 		}
-		
+
 		key, value, _ := strings.Cut(line, "=")
 		if key == "" {
 			// line starting with = is invalid
@@ -110,9 +121,11 @@ func (e EnvVarSharer) parseEnvVars(s string) ([]EnvVar, error) {
 			value = e.envRepository.Get(key)
 		}
 
+		isSensitive := slices.Contains(secretKeys, key)
 		envVars = append(envVars, EnvVar{
-			Key:   key,
-			Value: value,
+			Key:       key,
+			Value:     value,
+			Sensitive: isSensitive,
 		})
 	}
 

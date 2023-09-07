@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bitrise-io/go-steputils/v2/secretkeys"
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/errorutil"
@@ -41,6 +42,7 @@ func createEnvVarSharer(logger log.Logger) step.EnvVarSharer {
 	osEnvs := env.NewRepository()
 	inputParser := stepconf.NewInputParser(osEnvs)
 	envRepository := env.NewRepository()
+	secretKeysProvider := secretkeys.NewManager()
 
-	return step.NewEnvVarSharer(logger, inputParser, envRepository)
+	return step.NewEnvVarSharer(logger, inputParser, envRepository, secretKeysProvider)
 }

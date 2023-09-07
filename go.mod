@@ -3,9 +3,10 @@ module github.com/bitrise-steplib/bitrise-step-share-pipeline-variable
 go 1.19
 
 require (
-	github.com/bitrise-io/go-steputils/v2 v2.0.0-alpha.17
+	github.com/bitrise-io/go-steputils/v2 v2.0.0-alpha.19
 	github.com/bitrise-io/go-utils/v2 v2.0.0-alpha.16
 	github.com/stretchr/testify v1.8.2
+	golang.org/x/exp v0.0.0-20230807204917-050eac23e9de
 )
 
 require (
