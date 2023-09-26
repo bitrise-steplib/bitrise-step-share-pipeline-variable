@@ -23,18 +23,17 @@ inputs:
   opts:
     title: Variables to share between Pipeline Stages
     summary: |-
-      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+      A newline (`\n`) separated list of variable names or `NEW_ENV=NEW_VALUE` for declaring new variables.
     description: |-
-      A newline (`\n`) separated list of key - value pairs (`{key}={value}`).
+      A newline (`\n`) separated list of variable names or `NEW_ENV=NEW_VALUE` for declaring new variables.
 
-      The input uses a `{key}={value}` syntax.
-      The first equals sign (`=`) is the delimiter between the key and value of the environment variable.
+      The input uses a `KEY=VALUE` syntax for declaring new variables. The first `=` is the delimiter between the key and value of the environment variable.
       A shorthand syntax of `ENV_KEY` can be used for `ENV_KEY=$ENV_KEY` when sharing an existing environment variable (ENV_KEY).
 
       Examples:
       ```
-      MY_ENV_KEY=my value
-      EXISTING_ENV_KEY
+      MY_ENV_VAR=my value
+      EXISTING_ENV_VAR
       ```
     is_required: true
 - app_url: $BITRISE_APP_URL
