@@ -70,5 +70,21 @@ func checkEnvVarShareResponse(resp *http.Response) error {
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		return nil
 	}
-	return fmt.Errorf("request to %s failed: status code should be 2xx (%d)", resp.Request.URL, resp.StatusCode)
+	respErr := fmt.Errorf("request to %s failed: status code should be 2xx (%d)", resp.Request.URL, resp.StatusCode)
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return respErr
+	}
+	var respBodyJSON map[string]string
+	err = json.Unmarshal(respBody, &respBodyJSON)
+	if err != nil {
+		return respErr
+	}
+	clientRespErrMsg, isSet := respBodyJSON["error_msg"]
+	if !isSet || respBodyJSON["error_msg"] == "" {
+		return respErr
+	}
+	respErr = errors.New(respErr.Error() + fmt.Sprintf(", message: %s", clientRespErrMsg))
+
+	return respErr
 }
