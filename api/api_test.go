@@ -86,7 +86,10 @@ func TestBitriseClient_ShareEnvVars_FailingRequest(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		serverCalled = true
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error_msg":"some error"}`))
+		_, err := w.Write([]byte(`{"error_msg":"some error"}`))
+		if err != nil {
+			return
+		}
 	}))
 	defer server.Close()
 
