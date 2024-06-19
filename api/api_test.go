@@ -86,12 +86,16 @@ func TestBitriseClient_ShareEnvVars_FailingRequest(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		serverCalled = true
 		w.WriteHeader(http.StatusBadRequest)
+		_, err := w.Write([]byte(`{"error_msg":"some error"}`))
+		if err != nil {
+			return
+		}
 	}))
 	defer server.Close()
 
 	c := NewBitriseClient(server.URL, buildSlug, apiToken, log.NewLogger())
 	err := c.ShareEnvVars(envVars)
 	require.Error(t, err)
-	require.Equal(t, fmt.Sprintf("request to %s/pipeline/workflow_builds/slug/env_vars failed: status code should be 2xx (400)", server.URL), err.Error())
+	require.Equal(t, fmt.Sprintf("request to %s/pipeline/workflow_builds/slug/env_vars failed: status code should be 2xx (400), message: some error", server.URL), err.Error())
 	require.Equal(t, true, serverCalled)
 }
