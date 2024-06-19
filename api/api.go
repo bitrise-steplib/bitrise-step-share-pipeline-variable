@@ -80,12 +80,12 @@ func checkEnvVarShareResponse(resp *http.Response) error {
 	var respBodyJSON map[string]string
 	err = json.Unmarshal(respBody, &respBodyJSON)
 	if err != nil {
-		respErr = errors.New(respErr.Error() + fmt.Sprintf(", response body: %s", string(respBody))
+		respErr = errors.New(respErr.Error() + fmt.Sprintf(", response body: %s", string(respBody)))
 		return respErr
 	}
 	clientRespErrMsg, isSet := respBodyJSON["error_msg"]
 	if !isSet || respBodyJSON["error_msg"] == "" {
-		respErr = errors.New(respErr.Error() + fmt.Sprintf(", response body: %s", respBodyJSON)
+		respErr = errors.New(respErr.Error() + fmt.Sprintf(", response body: %s", respBodyJSON))
 		return respErr
 	}
 	respErr = errors.New(respErr.Error() + fmt.Sprintf(", message: %s", clientRespErrMsg))
