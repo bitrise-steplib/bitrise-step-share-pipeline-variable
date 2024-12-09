@@ -1,7 +1,7 @@
 title: Share Pipeline variables
-summary: Share environment variables between Pipeline Stages.
+summary: Share environment variables between Pipeline Workflows.
 description: |-
-  Share environment variables between Pipeline Stages.
+  Share environment variables between Pipeline Workflows. This step works with both Pipelines and Pipelines with Stages.
 
   Variables shared by the Step will be available in subsequent stages workflow's as [one-off env vars](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-a-custom-env-var-when-starting-a-build) as if provided manually on the website.
 
@@ -21,7 +21,7 @@ is_always_run: false
 inputs:
 - variables:
   opts:
-    title: Variables to share between Pipeline Stages
+    title: Variables to share between Pipeline Workflows
     summary: |-
       A newline (`\n`) separated list of variable names or `NEW_ENV=NEW_VALUE` for declaring new variables.
     description: |-
